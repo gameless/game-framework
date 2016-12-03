@@ -2,14 +2,17 @@
 extern crate log;
 extern crate piston_window;
 extern crate find_folder;
+extern crate gfx;
 
 use piston_window::*;
 
 mod logger;
+mod file_utils;
 
 use logger::GameLogger;
 use log::LogLevel;
 use std::process::exit;
+use file_utils::load_img;
 
 fn main() {
     // possible log levels
@@ -39,29 +42,7 @@ fn main() {
         }
     };
 
-    // init assets
-    info!("init assets");
-    let assets = match find_folder::Search::ParentsThenKids(3, 3).for_folder("assets") {
-        Ok(s) => s,
-        Err(e) => {
-            error!("Failed to open folder assets/");
-            exit(1);
-        }
-    };
-
-    info!("open rust.png");
-    let rust_logo = assets.join("rust.png");
-    info!("creating texture from rust.png");
-    let rust_logo = match Texture::from_path(&mut window.factory,
-                                             &rust_logo,
-                                             Flip::None,
-                                             &TextureSettings::new()) {
-        Ok(s) => s,
-        Err(e) => {
-            error!("Failed to open file assets/rust.png");
-            exit(1); //when I write this into a loader function have a placeholder image to use
-        }
-    };
+    let rust_logo = load_img("rust.png.old", &mut window.factory);
     info!("begin");
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
