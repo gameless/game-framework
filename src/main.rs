@@ -62,6 +62,8 @@ fn main() {
     let mut deltaX = 40.0;
     let mut deltaY = 20.0;
 
+    logo.scale.0 = 0.5;
+
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
     let mut events = window.events();
@@ -70,8 +72,6 @@ fn main() {
             // render
             gl.draw(r.viewport(), |mut c, gl| {
                 clear(BG_COLOR, gl);
-                // image(&rust_logo, c.transform, gl);
-
                 logo.draw(&c, gl);
             });
         }
