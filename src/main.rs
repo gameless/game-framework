@@ -59,6 +59,9 @@ fn main() {
 
     let mut logo = Sprite::new("logo.png");
 
+    let mut deltaX = 40.0;
+    let mut deltaY = 20.0;
+
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
     let mut events = window.events();
@@ -75,8 +78,21 @@ fn main() {
 
         if let Some(u) = e.update_args() {
             // update
-            logo.pos[0] += 0.2;
-            logo.pos[1] += 0.1;
+            if logo.pos.0 <= 0.0 {
+                deltaX = 40.0;
+            } else if logo.pos.0 as i32 + logo.get_width() as i32 >= 800 {
+                deltaX = -40.0;
+            }
+
+            if logo.pos.1 <= 0.0 {
+                deltaY = 20.0;
+            } else if logo.pos.1 as i32 + logo.get_height() as i32 >= 600 {
+                deltaY = -20.0;
+            }
+
+            logo.pos.0 += deltaX * u.dt;
+            logo.pos.1 += deltaY * u.dt;
+
         }
     }
 
