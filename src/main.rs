@@ -31,7 +31,7 @@ fn main() {
     // start piston
     info!("opening Piston Window");
     let opengl = OpenGL::V3_2;
-    let mut window: PistonWindow = match WindowSettings::new("piston: image", [300, 300])
+    let mut window: PistonWindow = match WindowSettings::new("piston: image", [800, 600])
         .exit_on_esc(true)
         .opengl(opengl)
         .build() {
@@ -42,7 +42,7 @@ fn main() {
         }
     };
 
-    let rust_logo = load_img("rust.png.old", &mut window.factory);
+    let rust_logo = load_img("logo.png", &mut window.factory);
     info!("begin");
     while let Some(e) = window.next() {
         window.draw_2d(&e, |c, g| {
