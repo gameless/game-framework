@@ -1,27 +1,25 @@
-use piston_window::*;
-use gfx::Resources;
+// use piston_window::*;
+use gfx_device_gl::Resources;
 use gfx::Factory;
 use find_folder::Search;
+use opengl_graphics::Texture;
+// use piston_window::{Flip, TextureSettings};
 
-
-pub fn load_img<R, F>(img_name: &str, factory: &mut F) -> Texture<R>
-    where R: Resources,
-          F: Factory<R>
-{
+pub fn load_img(img_name: &str) -> Texture {
     let path = match Search::ParentsThenKids(3, 3).for_folder("assets") {
         Ok(s) => s,
         Err(e) => {
             error!("failed to open folder assets/");
-            return Texture::empty(factory).unwrap();
+            return Texture::empty().unwrap();
         }
     };
 
     let path = path.join(img_name);
-    let img = match Texture::from_path(factory, &path, Flip::None, &TextureSettings::new()) {
+    let img = match Texture::from_path(&path) {
         Ok(s) => s,
         Err(e) => {
             error!("Failed to open file assets/{}", img_name);
-            return Texture::empty(factory).unwrap();
+            return Texture::empty().unwrap();
         }
     };
 
