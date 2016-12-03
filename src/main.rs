@@ -1,12 +1,14 @@
 #[macro_use]
 extern crate log;
+extern crate zip;
 extern crate sdl2_window;
 extern crate piston;
 extern crate find_folder;
 extern crate gfx;
 extern crate graphics;
 extern crate opengl_graphics;
-extern crate  gfx_device_gl;
+extern crate gfx_device_gl;
+extern crate image;
 
 use piston::window::WindowSettings;
 use piston::event_loop::*;
