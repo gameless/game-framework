@@ -5,6 +5,7 @@ authors = ["James Pruitt <jamescpruitt@gmail.com>"]
 
 [dependencies]
 log = "*"
+zip = "0.2"
 
 # piston stuff
 #piston_window = "0.58.0"
