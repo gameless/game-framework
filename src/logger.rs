@@ -39,13 +39,13 @@ impl Log for GameLogger {
 
     fn log(&self, record: &LogRecord) {
         if self.enabled(record.metadata()) {
-            let entry = format!("{} {}:{} - {}",
+            let entry = format!("{} {}:{} - {}\n",
                                 record.level(),
                                 record.location().file(),
                                 record.location().line(),
                                 record.args());
 
-            println!("{}", entry);
+            print!("{}", entry);
             self.log_file.write().unwrap().write_all(entry.as_bytes());
         }
     }
