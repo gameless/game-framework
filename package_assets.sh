@@ -1,6 +1,6 @@
 #! /bin/bash
-rm data.zip
-cd assets
-zip ../data.zip *
-cd ..
+if [ -f ./target/data.zip ]; then
+    rm ./target/data.zip
+fi
+zip ./target/data.zip assets/*
 

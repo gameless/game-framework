@@ -2,5 +2,7 @@
 cargo build --release
 ./package_assets.sh
 
-rm game-framework.zip
-zip -j game-framework.zip ./target/release/framework data.zip
+if [ -f ./target/game-framework.zip ]; then
+    rm ./target/game-framework.zip
+fi
+zip -j ./target/game-framework.zip ./target/release/framework ./target/data.zip
