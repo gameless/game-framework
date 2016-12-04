@@ -13,13 +13,37 @@ use image;
 use opengl_graphics::TextureSettings;
 use image::ImageFormat;
 use std::ops::Deref;
+use image::GenericImage;
+use image::Rgba;
+use image::Pixel;
+
+pub fn get_placeholder_tex() -> Texture {
+    let mut img = image::DynamicImage::new_rgba8(32, 32);
+    for x in 0..32 {
+        for y in 0..32 {
+            let mut color: [u8; 4] = [0, 0, 0, 255];
+
+            if (x < 16 && y < 16) || (x > 16 && y > 16) {
+                // magenta
+                color[0] = 255; //red
+                color[2] = 255; //blue
+            }
+
+            img.put_pixel(x,
+                          y,
+                          Rgba::from_channels(color[0], color[1], color[2], color[3]));
+        }
+    }
+    Texture::from_image(&img.to_rgba(), &TextureSettings::new())
+}
+
 
 pub fn load_img(img_name: &str) -> Texture {
     let path = match Search::ParentsThenKids(3, 3).for_folder("assets") {
         Ok(s) => s,
         Err(e) => {
             error!("failed to open folder assets/");
-            return Texture::empty().unwrap();
+            return get_placeholder_tex();
         }
     };
 
@@ -28,7 +52,7 @@ pub fn load_img(img_name: &str) -> Texture {
         Ok(s) => s,
         Err(e) => {
             error!("Failed to open file assets/{} as image", img_name);
-            return Texture::empty().unwrap();
+            return get_placeholder_tex();
         }
     };
 
@@ -75,7 +99,7 @@ pub fn load_img_from_zip(zipname: &str, imgname: &str) -> Texture {
         Ok(file) => file,
         Err(..) => {
             error!("File: {} not found in archive: {}", imgname, zipname);
-            return Texture::empty().unwrap();
+            return get_placeholder_tex();
         }
     };
 
@@ -91,7 +115,7 @@ pub fn load_img_from_zip(zipname: &str, imgname: &str) -> Texture {
         Ok(s) => s,
         Err(e) => {
             error!("failed to load {}/{} as image", zipname, imgname);
-            return Texture::empty().unwrap();
+            return get_placeholder_tex();
         }
     };
 
