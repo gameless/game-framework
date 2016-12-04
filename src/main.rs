@@ -9,14 +9,19 @@ extern crate graphics;
 extern crate opengl_graphics;
 extern crate gfx_device_gl;
 extern crate image;
+extern crate piston_window;
 
-use piston::window::WindowSettings;
+// use piston::window::WindowSettings;
 use piston::event_loop::*;
-use piston::input::*;
-use sdl2_window::Sdl2Window as Window;
+// use piston::input::*;
+// use sdl2_window::Sdl2Window as Window;
+use piston_window::PistonWindow;
+use piston_window::WindowSettings;
 use opengl_graphics::OpenGL;
 use opengl_graphics::GlGraphics;
 use graphics::clear;
+use piston_window::RenderEvent;
+use piston_window::UpdateEvent;
 // use graphics::image;
 
 mod logger;
@@ -46,16 +51,11 @@ fn main() {
     // start piston
     info!("opening Piston Window");
     let opengl = OpenGL::V3_2;
-    let mut window: Window = match WindowSettings::new("Game Framework", [800, 600])
+
+    let mut window: PistonWindow = WindowSettings::new("Hello Piston!", (640, 480))
         .exit_on_esc(true)
-        .opengl(opengl)
-        .build() {
-        Ok(window) => window,
-        Err(e) => {
-            error!("Failed to open piston window");
-            exit(1); //quit nothing more to do here
-        }
-    };
+        .build()
+        .unwrap_or_else(|e| panic!("Failed to build PistonWindow: {}", e));
 
     let mut gl = GlGraphics::new(opengl);
 
@@ -71,8 +71,8 @@ fn main() {
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
-    let mut events = window.events();
-    while let Some(e) = events.next(&mut window) {
+
+    while let Some(e) = window.next() {
         if let Some(r) = e.render_args() {
             // render
             gl.draw(r.viewport(), |mut c, gl| {
