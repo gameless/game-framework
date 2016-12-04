@@ -67,7 +67,7 @@ fn main() {
     logo.scale.0 = 0.5;
 
     // load bg from zip
-    let bg = file_utils::load_img_from_zip("assets/data.zip", "bg.png");
+    let bg = file_utils::load_img_from_zip("data.zip", "bg.png");
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
