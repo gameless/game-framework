@@ -1,4 +1,4 @@
-all: build package_assets
+all: build package_assets.sh
 .PHONY : all
 
 build: 
