@@ -39,7 +39,7 @@ pub fn load_zip_archive(zipname: &str) -> ZipArchive<File> {
     let zipfile = match File::open(&zipname) {
         Err(e) => {
             error!("Could not open file: {}", zipname);
-            exit(1)
+            exit(1);
         }
         Ok(s) => s,
     };
@@ -75,7 +75,7 @@ pub fn load_img_from_zip(zipname: &str, imgname: &str) -> Texture {
         Ok(file) => file,
         Err(..) => {
             error!("File: {} not found in archive: {}", imgname, zipname);
-            exit(1);
+            return Texture::empty().unwrap();
         }
     };
 
@@ -91,7 +91,7 @@ pub fn load_img_from_zip(zipname: &str, imgname: &str) -> Texture {
         Ok(s) => s,
         Err(e) => {
             error!("failed to load {}/{} as image", zipname, imgname);
-            exit(1);
+            return Texture::empty().unwrap();
         }
     };
 
