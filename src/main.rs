@@ -17,7 +17,7 @@ use sdl2_window::Sdl2Window as Window;
 use opengl_graphics::OpenGL;
 use opengl_graphics::GlGraphics;
 use graphics::clear;
-use graphics::image;
+// use graphics::image;
 
 mod logger;
 mod file_utils;
@@ -66,6 +66,9 @@ fn main() {
 
     logo.scale.0 = 0.5;
 
+    // load bg from zip
+    let bg = file_utils::load_img_from_zip("assets/data.zip", "bg.png");
+
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
     let mut events = window.events();
@@ -74,6 +77,7 @@ fn main() {
             // render
             gl.draw(r.viewport(), |mut c, gl| {
                 clear(BG_COLOR, gl);
+                graphics::image(&bg, c.transform, gl);
                 logo.draw(&c, gl);
             });
         }
