@@ -1,7 +1,7 @@
 #[macro_use]
 extern crate log;
 extern crate zip;
-extern crate sdl2_window;
+
 extern crate piston;
 extern crate find_folder;
 extern crate gfx;
