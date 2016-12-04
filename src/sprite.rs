@@ -1,5 +1,6 @@
 // use piston_window::*;
 use file_utils::load_img;
+use file_utils::load_img_from_zip;
 use gfx_device_gl::Resources;
 use gfx::Factory;
 use graphics::Context;
@@ -19,6 +20,14 @@ impl Sprite {
     pub fn new(filename: &str) -> Sprite {
         Sprite {
             tex: load_img(filename),
+            pos: (0.0, 0.0),
+            scale: (1.0, 1.0),
+        }
+    }
+
+    pub fn new_from_zip(zipfile: &str, imgname: &str) -> Sprite {
+        Sprite {
+            tex: load_img_from_zip(zipfile, imgname),
             pos: (0.0, 0.0),
             scale: (1.0, 1.0),
         }
