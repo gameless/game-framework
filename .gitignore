@@ -1,5 +1,6 @@
 # Temp files
 *.swp
+log
 
 # Rust files
 target/

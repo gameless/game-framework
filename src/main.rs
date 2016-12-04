@@ -59,7 +59,7 @@ fn main() {
 
     let mut gl = GlGraphics::new(opengl);
 
-    let mut logo = Sprite::new_from_zip("data.zip", "assets/logo.png");
+    let mut logo = Sprite::new_from_zip("target/data.zip", "assets/logo.png");
 
     let mut deltaX = 40.0;
     let mut deltaY = 20.0;
@@ -67,7 +67,7 @@ fn main() {
     logo.scale.0 = 0.5;
 
     // load bg from zip
-    let bg = file_utils::load_img_from_zip("data.zip", "assets/bg.png");
+    let bg = file_utils::load_img_from_zip("target/data.zip", "assets/bg.png");
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
