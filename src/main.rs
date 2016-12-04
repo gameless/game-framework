@@ -52,10 +52,13 @@ fn main() {
     info!("opening Piston Window");
     let opengl = OpenGL::V3_2;
 
-    let mut window: PistonWindow = WindowSettings::new("Hello Piston!", (640, 480))
+    let mut window: PistonWindow = WindowSettings::new("Game Framework", (800, 600))
         .exit_on_esc(true)
         .build()
-        .unwrap_or_else(|e| panic!("Failed to build PistonWindow: {}", e));
+        .unwrap_or_else(|e| {
+            error!("Failed to build PistonWindow: {}", e);
+            exit(1)
+        });
 
     let mut gl = GlGraphics::new(opengl);
 
