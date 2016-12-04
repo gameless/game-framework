@@ -44,7 +44,7 @@ fn main() {
     // start piston
     info!("opening Piston Window");
     let opengl = OpenGL::V3_2;
-    let mut window: Window = match WindowSettings::new("piston: image", [800, 600])
+    let mut window: Window = match WindowSettings::new("Game Framework", [800, 600])
         .exit_on_esc(true)
         .opengl(opengl)
         .build() {
