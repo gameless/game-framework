@@ -16,6 +16,7 @@ use std::ops::Deref;
 use image::GenericImage;
 use image::Rgba;
 use image::Pixel;
+use std::path::PathBuf;
 
 pub fn get_placeholder_tex() -> Texture {
     let mut img = image::DynamicImage::new_rgba8(32, 32);
@@ -92,13 +93,14 @@ pub fn load_zip_archive(zipname: &str) -> ZipArchive<File> {
 // file
 // }
 
-pub fn load_img_from_zip(zipname: &str, imgname: &str) -> Texture {
+pub fn load_img_from_zip(zipname: &str, imgname: &PathBuf) -> Texture {
+	let imgname = imgname.to_str().unwrap();
     let mut archive = load_zip_archive(zipname);
 
     let mut file = match archive.by_name(imgname) {
         Ok(file) => file,
-        Err(..) => {
-            error!("File: {} not found in archive: {}", imgname, zipname);
+        Err(e) => {
+            error!("File: {} not found in archive: {} Error: {}", imgname, zipname, e);
             return get_placeholder_tex();
         }
     };

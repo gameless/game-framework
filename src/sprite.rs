@@ -9,6 +9,7 @@ use opengl_graphics::GlGraphics;
 use opengl_graphics::Texture;
 use graphics::Transformed;
 use graphics::ImageSize;
+use std::path::PathBuf;
 
 pub struct Sprite {
     tex: Texture,
@@ -25,7 +26,7 @@ impl Sprite {
         }
     }
 
-    pub fn new_from_zip(zipfile: &str, imgname: &str) -> Sprite {
+    pub fn new_from_zip(zipfile: &str, imgname: &PathBuf) -> Sprite {
         Sprite {
             tex: load_img_from_zip(zipfile, imgname),
             pos: (0.0, 0.0),
