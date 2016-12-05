@@ -1,7 +1,11 @@
 [package]
 name = "framework"
 version = "0.1.0"
-authors = ["James Pruitt <jamescpruitt@gmail.com>"]
+authors = [
+    "Sam Estep <sam@samestep.com>",
+    "James Pruitt <jamescpruitt@gmail.com>",
+    "Jeffrey Walraven <jeffrey@ravenswall.net>"
+]
 
 [dependencies]
 log = "*"
