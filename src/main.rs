@@ -24,17 +24,19 @@ use piston_window::RenderEvent;
 use piston_window::UpdateEvent;
 use std::path::PathBuf;
 use std::path::Path;
-// use graphics::image;
+use graphics::Transformed;
 
 mod logger;
 mod file_utils;
 mod sprite;
+mod background;
 
 use logger::GameLogger;
 use log::LogLevel;
 use std::process::exit;
 use file_utils::load_img;
 use sprite::Sprite;
+use background::Background;
 
 fn main() {
     // possible log levels
@@ -63,8 +65,8 @@ fn main() {
         });
 
     let mut gl = GlGraphics::new(opengl);
-	
-	let assets = Path::new("assets");
+
+    let assets = Path::new("assets");
 
     let mut logo = Sprite::new_from_zip("data.zip", &assets.join("logo.png"));
 
@@ -73,8 +75,12 @@ fn main() {
 
     logo.scale.0 = 0.5;
 
+    let mut cam_x = 0.0;
+    let mut cam_y = 0.0;
+
     // load bg from zip
-    let bg = file_utils::load_img_from_zip("data.zip", &assets.join("bg.png"));
+    // let bg = file_utils::load_img_from_zip("data.zip", &assets.join("bg.png"));
+    let bg = Background::new_from_zip("data.zip", &assets.join("tile_bg.png"));
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
@@ -84,12 +90,19 @@ fn main() {
             // render
             gl.draw(r.viewport(), |mut c, gl| {
                 clear(BG_COLOR, gl);
-                graphics::image(&bg, c.transform, gl);
+                // graphics::image(&bg, c.transform, gl);
+                c.transform = c.transform.trans(cam_x, cam_y);
+                bg.draw((cam_x, cam_y), &c, gl);
                 logo.draw(&c, gl);
             });
         }
 
         if let Some(u) = e.update_args() {
+
+            cam_x = (logo.pos.0 * -1.0) + (400.0 - (logo.get_width() as f64 / 2.0));
+            cam_y = (logo.pos.1 * -1.0) + (300.0 - (logo.get_height() as f64 / 2.0));
+
+
             // update
             if logo.pos.0 <= 0.0 {
                 deltaX = 40.0;
