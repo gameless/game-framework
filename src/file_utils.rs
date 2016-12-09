@@ -37,7 +37,7 @@ pub fn get_placeholder_tex(factory: &mut Factory) -> Texture<Resources> {
                           Rgba::from_channels(color[0], color[1], color[2], color[3]));
         }
     }
-    Texture::from_image(factory, &img.to_rgba(), &TextureSettings::new()).unwrap();
+    Texture::from_image(factory, &img.to_rgba(), &TextureSettings::new()).unwrap()
 }
 
 

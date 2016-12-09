@@ -72,7 +72,7 @@ fn main() {
 
     let assets = Path::new("assets");
 
-    let mut logo = Sprite::new_from_zip("data.zip", &assets.join("logo.png"));
+    let mut logo = Sprite::new_from_zip(&mut window.factory, "data.zip", &assets.join("logo.png"));
 
     let mut deltaX = 40.0;
     let mut deltaY = 20.0;
@@ -91,7 +91,7 @@ fn main() {
 
     // load bg from zip
     // let bg = file_utils::load_img_from_zip("data.zip", &assets.join("bg.png"));
-    let bg = Background::new_from_zip("data.zip", &assets.join("tile_bg.png"));
+    let bg = Background::new_from_zip(&mut window.factory, "data.zip", &assets.join("tile_bg.png"));
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
@@ -112,7 +112,8 @@ fn main() {
             // logo.draw(&c, gl);
         });
 
-        logo.draw(&mut window, &e);
+        bg.draw((cam_x, cam_y), &mut window, &e);
+        logo.draw((cam_x, cam_y), &mut window, &e);
 
 
         if let Some(u) = e.update_args() {

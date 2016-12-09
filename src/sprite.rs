@@ -37,10 +37,11 @@ impl Sprite {
         }
     }
 
-    pub fn draw(&self, window: &mut Window, event: &Event) {
+    pub fn draw(&self, cam: (f64, f64), window: &mut Window, event: &Event) {
         // draw stuff
         //
         window.draw_2d(event, |mut c, gl| {
+            c.transform = c.transform.trans(cam.0, cam.1);
             image(&self.tex,
                   c.transform.trans(self.pos.0, self.pos.1).scale(self.scale.0, self.scale.1),
                   gl);
