@@ -6,9 +6,15 @@ use file_utils::load_img_from_zip;
 use gfx_device_gl::Resources;
 use gfx_device_gl::Factory;
 use graphics::Context;
-use piston_window::image;
+<<<<<<< Updated upstream
+use graphics::image;
 use piston_window::PistonWindow as Window;
+use opengl_graphics::Texture;
+=======
+use piston_window::image;
+use opengl_graphics::GlGraphics;
 use piston_window::Texture;
+>>>>>>> Stashed changes
 use graphics::Transformed;
 use graphics::ImageSize;
 use std::path::PathBuf;

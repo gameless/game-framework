@@ -95,10 +95,14 @@ pub fn load_zip_archive(zipname: &str) -> ZipArchive<File> {
 // file
 // }
 
+<<<<<<< Updated upstream
+pub fn load_img_from_zip(zipname: &str, imgname: &PathBuf) -> Texture {
+=======
 pub fn load_img_from_zip(factory: &mut Factory,
                          zipname: &str,
                          imgname: &PathBuf)
                          -> Texture<Resources> {
+>>>>>>> Stashed changes
     let imgname = imgname.to_str().unwrap();
     let mut archive = load_zip_archive(zipname);
 
@@ -109,7 +113,11 @@ pub fn load_img_from_zip(factory: &mut Factory,
                    imgname,
                    zipname,
                    e);
+<<<<<<< Updated upstream
+            return get_placeholder_tex();
+=======
             return get_placeholder_tex(factory);
+>>>>>>> Stashed changes
         }
     };
 

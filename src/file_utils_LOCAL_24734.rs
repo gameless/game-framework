@@ -1,10 +1,8 @@
 use std::io::prelude::*;
 use gfx_device_gl::Resources;
-use gfx_device_gl::Factory;
+use gfx::Factory;
 use find_folder::Search;
-// use opengl_graphics::Texture;
-use piston_window::Texture;
-use piston_window::Flip;
+use opengl_graphics::Texture;
 use zip::ZipArchive;
 use zip::read::ZipFile;
 use std::fs::File;
@@ -12,7 +10,7 @@ use std::process::exit;
 use std::io::BufReader;
 use std::io::Cursor;
 use image;
-use piston_window::TextureSettings;
+use opengl_graphics::TextureSettings;
 use image::ImageFormat;
 use std::ops::Deref;
 use image::GenericImage;
@@ -20,7 +18,7 @@ use image::Rgba;
 use image::Pixel;
 use std::path::PathBuf;
 
-pub fn get_placeholder_tex(factory: &mut Factory) -> Texture<Resources> {
+pub fn get_placeholder_tex() -> Texture {
     let mut img = image::DynamicImage::new_rgba8(32, 32);
     for x in 0..32 {
         for y in 0..32 {
@@ -37,25 +35,25 @@ pub fn get_placeholder_tex(factory: &mut Factory) -> Texture<Resources> {
                           Rgba::from_channels(color[0], color[1], color[2], color[3]));
         }
     }
-    Texture::from_image(factory, &img.to_rgba(), &TextureSettings::new()).unwrap();
+    Texture::from_image(&img.to_rgba(), &TextureSettings::new())
 }
 
 
-pub fn load_img(factory: &mut Factory, img_name: &str) -> Texture<Resources> {
+pub fn load_img(img_name: &str) -> Texture {
     let path = match Search::ParentsThenKids(3, 3).for_folder("assets") {
         Ok(s) => s,
         Err(e) => {
             error!("failed to open folder assets/");
-            return get_placeholder_tex(factory);
+            return get_placeholder_tex();
         }
     };
 
     let path = path.join(img_name);
-    let img = match Texture::from_path(factory, &path, Flip::None, &TextureSettings::new()) {
+    let img = match Texture::from_path(&path) {
         Ok(s) => s,
         Err(e) => {
             error!("Failed to open file assets/{} as image", img_name);
-            return get_placeholder_tex(factory);
+            return get_placeholder_tex();
         }
     };
 
@@ -95,10 +93,7 @@ pub fn load_zip_archive(zipname: &str) -> ZipArchive<File> {
 // file
 // }
 
-pub fn load_img_from_zip(factory: &mut Factory,
-                         zipname: &str,
-                         imgname: &PathBuf)
-                         -> Texture<Resources> {
+pub fn load_img_from_zip(zipname: &str, imgname: &PathBuf) -> Texture {
     let imgname = imgname.to_str().unwrap();
     let mut archive = load_zip_archive(zipname);
 
@@ -109,7 +104,7 @@ pub fn load_img_from_zip(factory: &mut Factory,
                    imgname,
                    zipname,
                    e);
-            return get_placeholder_tex(factory);
+            return get_placeholder_tex();
         }
     };
 
@@ -125,10 +120,10 @@ pub fn load_img_from_zip(factory: &mut Factory,
         Ok(s) => s,
         Err(e) => {
             error!("failed to load {}/{} as image", zipname, imgname);
-            return get_placeholder_tex(factory);
+            return get_placeholder_tex();
         }
     };
 
-    let tex = Texture::from_image(factory, &img.to_rgba(), &TextureSettings::new());
-    tex.unwrap()
+    let tex = Texture::from_image(&img.to_rgba(), &TextureSettings::new());
+    tex
 }
