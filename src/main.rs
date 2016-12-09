@@ -17,7 +17,7 @@ use piston::event_loop::*;
 // use sdl2_window::Sdl2Window as Window;
 use piston_window::PistonWindow;
 use piston_window::WindowSettings;
-use opengl_graphics::OpenGL;
+use piston_window::OpenGL;
 use opengl_graphics::GlGraphics;
 use graphics::clear;
 use piston_window::RenderEvent;
@@ -37,6 +37,11 @@ use std::process::exit;
 use file_utils::load_img;
 use sprite::Sprite;
 use background::Background;
+
+use piston_window::Texture;
+use piston_window::TextureSettings;
+use piston_window::Flip;
+
 
 fn main() {
     // possible log levels
@@ -58,13 +63,12 @@ fn main() {
 
     let mut window: PistonWindow = WindowSettings::new("Game Framework", (800, 600))
         .exit_on_esc(true)
+        .opengl(opengl)
         .build()
         .unwrap_or_else(|e| {
             error!("Failed to build PistonWindow: {}", e);
             exit(1)
         });
-
-    let mut gl = GlGraphics::new(opengl);
 
     let assets = Path::new("assets");
 
@@ -78,6 +82,13 @@ fn main() {
     let mut cam_x = 0.0;
     let mut cam_y = 0.0;
 
+    // test
+    let test_img = Texture::from_path(&mut window.factory,
+                                      &assets.join("tile_bg.png"),
+                                      Flip::None,
+                                      &TextureSettings::new())
+        .unwrap();
+
     // load bg from zip
     // let bg = file_utils::load_img_from_zip("data.zip", &assets.join("bg.png"));
     let bg = Background::new_from_zip("data.zip", &assets.join("tile_bg.png"));
@@ -86,16 +97,23 @@ fn main() {
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
 
     while let Some(e) = window.next() {
-        if let Some(r) = e.render_args() {
-            // render
-            gl.draw(r.viewport(), |mut c, gl| {
-                clear(BG_COLOR, gl);
-                // graphics::image(&bg, c.transform, gl);
-                c.transform = c.transform.trans(cam_x, cam_y);
-                bg.draw((cam_x, cam_y), &c, gl);
-                logo.draw(&c, gl);
-            });
-        }
+
+        // render
+        window.draw_2d(&e, |mut c, gl| {
+            clear(BG_COLOR, gl);
+            // graphics::image(&bg, c.transform, gl);
+            //
+            // draw test graphic
+
+
+
+            c.transform = c.transform.trans(cam_x, cam_y);
+            // bg.draw((cam_x, cam_y), &c, gl);
+            // logo.draw(&c, gl);
+        });
+
+        logo.draw(&mut window, &e);
+
 
         if let Some(u) = e.update_args() {
 

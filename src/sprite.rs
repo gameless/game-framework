@@ -1,3 +1,5 @@
+extern crate gfx_graphics;
+
 // use piston_window::*;
 use file_utils::load_img;
 use file_utils::load_img_from_zip;
@@ -5,11 +7,12 @@ use gfx_device_gl::Resources;
 use gfx::Factory;
 use graphics::Context;
 use graphics::image;
-use opengl_graphics::GlGraphics;
+use piston_window::PistonWindow as Window;
 use opengl_graphics::Texture;
 use graphics::Transformed;
 use graphics::ImageSize;
 use std::path::PathBuf;
+use piston_window::Event;
 
 pub struct Sprite {
     tex: Texture,
@@ -34,11 +37,14 @@ impl Sprite {
         }
     }
 
-    pub fn draw(&self, c: &Context, gl: &mut GlGraphics) {
+    pub fn draw(&self, window: &mut Window, event: &Event) {
         // draw stuff
-        image(&self.tex,
-              c.transform.trans(self.pos.0, self.pos.1).scale(self.scale.0, self.scale.1),
-              gl);
+        //
+        window.draw_2d(event, |mut c, gl| {
+            image(&self.tex,
+                  c.transform.trans(self.pos.0, self.pos.1).scale(self.scale.0, self.scale.1),
+                  gl);
+        });
     }
 
     pub fn get_size(&self) -> (u32, u32) {

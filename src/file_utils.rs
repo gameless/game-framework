@@ -94,13 +94,16 @@ pub fn load_zip_archive(zipname: &str) -> ZipArchive<File> {
 // }
 
 pub fn load_img_from_zip(zipname: &str, imgname: &PathBuf) -> Texture {
-	let imgname = imgname.to_str().unwrap();
+    let imgname = imgname.to_str().unwrap();
     let mut archive = load_zip_archive(zipname);
 
     let mut file = match archive.by_name(imgname) {
         Ok(file) => file,
         Err(e) => {
-            error!("File: {} not found in archive: {} Error: {}", imgname, zipname, e);
+            error!("File: {} not found in archive: {} Error: {}",
+                   imgname,
+                   zipname,
+                   e);
             return get_placeholder_tex();
         }
     };
