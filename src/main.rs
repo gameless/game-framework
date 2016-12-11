@@ -43,6 +43,7 @@ use piston_window::Texture;
 use piston_window::TextureSettings;
 use piston_window::Flip;
 use draw::DrawContext;
+use piston_window::Window;
 
 
 fn main() {
@@ -83,22 +84,25 @@ fn main() {
 
     let mut cam_x = 0.0;
     let mut cam_y = 0.0;
-
-    // test
-    let test_img = Texture::from_path(&mut window.factory,
-                                      &assets.join("tile_bg.png"),
-                                      Flip::None,
-                                      &TextureSettings::new())
-        .unwrap();
-
+	
     // load bg from zip
     // let bg = file_utils::load_img_from_zip("data.zip", &assets.join("bg.png"));
     let bg = Background::new_from_zip(&mut window.factory, "data.zip", &assets.join("tile_bg.png"));
 
     info!("begin");
     let BG_COLOR = [0.0, 0.0, 0.0, 1.0];
+	
+	let mut res = (800, 600);
 
     while let Some(e) = window.next() {
+		
+		// if resolution has changed log it
+		if window.size().width != res.0 || window.size().height != res.1{
+			res.0 = window.size().width;
+			res.1 = window.size().height;
+			debug!("Resolution has changed: {}, {}", res.0, res.1);
+		}
+		
 
         // render
         window.draw_2d(&e, |mut c, gl| {
@@ -118,20 +122,20 @@ fn main() {
 
         if let Some(u) = e.update_args() {
 
-            cam_x = (logo.pos.0 * -1.0) + (400.0 - (logo.get_width() as f64 / 2.0));
-            cam_y = (logo.pos.1 * -1.0) + (300.0 - (logo.get_height() as f64 / 2.0));
+            cam_x = (logo.pos.0 * -1.0) + ((res.0 / 2) as f64 - (logo.get_width() as f64 / 2.0));
+            cam_y = (logo.pos.1 * -1.0) + ((res.1 / 2) as f64 - (logo.get_height() as f64 / 2.0));
 
 
             // update
             if logo.pos.0 <= 0.0 {
                 deltaX = 40.0;
-            } else if logo.pos.0 as i32 + logo.get_width() as i32 >= 800 {
+            } else if logo.pos.0 as i32 + logo.get_width() as i32 >= res.0 as i32 {
                 deltaX = -40.0;
             }
 
             if logo.pos.1 <= 0.0 {
                 deltaY = 20.0;
-            } else if logo.pos.1 as i32 + logo.get_height() as i32 >= 600 {
+            } else if logo.pos.1 as i32 + logo.get_height() as i32 >= res.1 as i32 {
                 deltaY = -20.0;
             }
 
