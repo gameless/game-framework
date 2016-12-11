@@ -9,6 +9,7 @@ use gfx_device_gl::Factory;
 use gfx_device_gl::Resources;
 use piston_window::PistonWindow as Window;
 use piston_window::Event;
+use draw::DrawContext;
 
 pub struct Background {
     tex: Texture<Resources>,
@@ -21,14 +22,15 @@ impl Background {
         Background { tex: load_img_from_zip(factory, zipname, filename) }
     }
 
-    pub fn draw(&self, cam_offset: (f64, f64), window: &mut Window, event: &Event) {
-        window.draw_2d(event, |mut c, gl| {
-            c.transform = c.transform.trans(cam_offset.0, cam_offset.1);
+    pub fn draw(&self, context: &mut DrawContext) {
+        let cam = context.cam.clone();
+
+        context.window.draw_2d(context.event, |mut c, gl| {
+            c.transform = c.transform.trans(cam.0, cam.1);
             // re assign cam_offset to be the next lowest multiple of tex.width
-            let cam_offset = ((cam_offset.0 / self.tex.get_width() as f64).ceil() *
-                              self.tex.get_width() as f64,
-                              (cam_offset.1 / self.tex.get_height() as f64).ceil() *
-                              self.tex.get_height() as f64);
+            let cam_offset =
+                ((cam.0 / self.tex.get_width() as f64).ceil() * self.tex.get_width() as f64,
+                 (cam.1 / self.tex.get_height() as f64).ceil() * self.tex.get_height() as f64);
 
             // loop through screen
             let mut x: f64 = cam_offset.0 * -1.0;

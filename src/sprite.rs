@@ -13,6 +13,7 @@ use graphics::Transformed;
 use graphics::ImageSize;
 use std::path::PathBuf;
 use piston_window::Event;
+use draw::DrawContext;
 
 pub struct Sprite {
     tex: Texture<Resources>,
@@ -37,10 +38,12 @@ impl Sprite {
         }
     }
 
-    pub fn draw(&self, cam: (f64, f64), window: &mut Window, event: &Event) {
+    pub fn draw(&self, context: &mut DrawContext) {
         // draw stuff
         //
-        window.draw_2d(event, |mut c, gl| {
+        let cam = context.cam.clone();
+
+        context.window.draw_2d(context.event, |mut c, gl| {
             c.transform = c.transform.trans(cam.0, cam.1);
             image(&self.tex,
                   c.transform.trans(self.pos.0, self.pos.1).scale(self.scale.0, self.scale.1),

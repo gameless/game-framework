@@ -30,6 +30,7 @@ mod logger;
 mod file_utils;
 mod sprite;
 mod background;
+mod draw;
 
 use logger::GameLogger;
 use log::LogLevel;
@@ -41,6 +42,7 @@ use background::Background;
 use piston_window::Texture;
 use piston_window::TextureSettings;
 use piston_window::Flip;
+use draw::DrawContext;
 
 
 fn main() {
@@ -101,19 +103,17 @@ fn main() {
         // render
         window.draw_2d(&e, |mut c, gl| {
             clear(BG_COLOR, gl);
-            // graphics::image(&bg, c.transform, gl);
-            //
-            // draw test graphic
-
-
-
-            c.transform = c.transform.trans(cam_x, cam_y);
-            // bg.draw((cam_x, cam_y), &c, gl);
-            // logo.draw(&c, gl);
         });
 
-        bg.draw((cam_x, cam_y), &mut window, &e);
-        logo.draw((cam_x, cam_y), &mut window, &e);
+        // create DrawContext
+        let mut d_context = DrawContext {
+            cam: (cam_x, cam_y),
+            window: &mut window,
+            event: &e,
+        };
+
+        bg.draw(&mut d_context);
+        logo.draw(&mut d_context);
 
 
         if let Some(u) = e.update_args() {
